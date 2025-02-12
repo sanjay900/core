@@ -69,10 +69,7 @@ async def async_setup_entry(
     panel_conn = config_entry.runtime_data
     panel = panel_conn.panel
 
-    def setup():
-        async_add_entities(
-            PanelLockEntity(lock_id, panel_conn, door)
-            for (lock_id, door) in panel.doors.items()
-        )
-
-    panel_conn.on_connect.append(setup)
+    async_add_entities(
+        PanelLockEntity(lock_id, panel_conn, door)
+        for (lock_id, door) in panel.doors.items()
+    )

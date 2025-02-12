@@ -64,10 +64,7 @@ async def async_setup_entry(
     panel_conn = config_entry.runtime_data
     panel = panel_conn.panel
 
-    def setup():
-        async_add_entities(
-            PanelOutputEntity(output_id, output, panel_conn)
-            for (output_id, output) in panel.outputs.items()
-        )
-
-    panel_conn.on_connect.append(setup)
+    async_add_entities(
+        PanelOutputEntity(output_id, output, panel_conn)
+        for (output_id, output) in panel.outputs.items()
+    )

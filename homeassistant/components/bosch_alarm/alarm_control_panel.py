@@ -150,19 +150,16 @@ async def async_setup_entry(
 
     arming_code = config_entry.options.get(CONF_CODE, None)
 
-    def setup():
-        async_add_entities(
-            AreaAlarmControlPanel(
-                panel_conn,
-                arming_code,
-                area_id,
-                area,
-                f"{panel_conn.unique_id}_area_{area_id}",
-            )
-            for (area_id, area) in panel.areas.items()
+    async_add_entities(
+        AreaAlarmControlPanel(
+            panel_conn,
+            arming_code,
+            area_id,
+            area,
+            f"{panel_conn.unique_id}_area_{area_id}",
         )
-
-    panel_conn.on_connect.append(setup)
+        for (area_id, area) in panel.areas.items()
+    )
 
     platform = entity_platform.async_get_current_platform()
     platform.async_register_entity_service(

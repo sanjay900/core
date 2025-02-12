@@ -128,14 +128,11 @@ async def async_setup_entry(
         ]
     )
 
-    def setup():
-        async_add_entities(
-            PointSensor(
-                point,
-                f"{panel_conn.unique_id}_point_{point_id}",
-                panel_conn.device_info(),
-            )
-            for (point_id, point) in panel.points.items()
+    async_add_entities(
+        PointSensor(
+            point,
+            f"{panel_conn.unique_id}_point_{point_id}",
+            panel_conn.device_info(),
         )
-
-    panel_conn.on_connect.append(setup)
+        for (point_id, point) in panel.points.items()
+    )

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
+import ssl
 
 import bosch_alarm_mode2
 
@@ -15,6 +17,7 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import device_registry as dr
 
 from .const import CONF_INSTALLER_CODE, CONF_USER_CODE, DOMAIN
@@ -50,10 +53,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     entry.async_on_unload(entry.add_update_listener(options_update_listener))
 
+    try:
+        await panel.connect()
+    except (PermissionError, ValueError) as err:
+        await panel.disconnect()
+        raise ConfigEntryAuthFailed from err
+    except (
+        OSError,
+        ConnectionRefusedError,
+        ssl.SSLError,
+        asyncio.exceptions.TimeoutError,
+    ) as err:
+        await panel.disconnect()
+        raise ConfigEntryNotReady("Device is offline") from err
+
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     )
-    entry.async_create_background_task(hass, panel.connect(), "panel_connection")
     return True
 
 
