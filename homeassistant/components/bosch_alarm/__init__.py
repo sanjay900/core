@@ -8,7 +8,13 @@ from homeassistant.core import HomeAssistant
 
 from .coordinator import BoschAlarmConfigEntry, BoschAlarmCoordinator
 
-PLATFORMS: list[Platform] = [Platform.ALARM_CONTROL_PANEL]
+PLATFORMS: list[Platform] = [
+    Platform.ALARM_CONTROL_PANEL,
+    Platform.BINARY_SENSOR,
+    Platform.LOCK,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: BoschAlarmConfigEntry) -> bool:

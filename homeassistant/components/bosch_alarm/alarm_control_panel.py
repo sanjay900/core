@@ -2,18 +2,31 @@
 
 from __future__ import annotations
 
+import datetime as dt
+from typing import Any
+
+import voluptuous as vol
+
 from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
     AlarmControlPanelEntityFeature,
     AlarmControlPanelState,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv, entity_platform
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 from .coordinator import BoschAlarmConfigEntry, BoschAlarmCoordinator
+
+DATETIME_ATTR = "datetime"
+SET_DATE_TIME_SERVICE_NAME = "set_date_time"
+SET_DATE_TIME_SCHEMA = cv.make_entity_service_schema(
+    {vol.Optional(DATETIME_ATTR): cv.datetime}
+)
 
 
 async def async_setup_entry(
@@ -30,6 +43,10 @@ async def async_setup_entry(
             area_id,
         )
         for area_id in coordinator.panel.areas
+    )
+    platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service(
+        SET_DATE_TIME_SERVICE_NAME, SET_DATE_TIME_SCHEMA, "set_panel_date"
     )
 
 
@@ -97,11 +114,12 @@ class AreaAlarmControlPanel(
         """Run when entity attached to hass."""
         await super().async_added_to_hass()
         self._area.status_observer.attach(self.schedule_update_ha_state)
-        self._area.alarm_observer.attach(self.schedule_update_ha_state)
-        self._area.ready_observer.attach(self.schedule_update_ha_state)
 
     async def async_will_remove_from_hass(self) -> None:
         """Run when entity removed from hass."""
         self._area.status_observer.detach(self.schedule_update_ha_state)
-        self._area.alarm_observer.detach(self.schedule_update_ha_state)
-        self._area.ready_observer.detach(self.schedule_update_ha_state)
+
+    async def set_panel_date(self, **kwargs: Any) -> None:
+        """Set the date and time on a bosch alarm panel."""
+        value: dt.datetime = kwargs.get(DATETIME_ATTR, dt_util.now())
+        await self.coordinator.panel.set_panel_date(value)

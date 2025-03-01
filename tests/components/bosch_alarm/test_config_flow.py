@@ -7,7 +7,7 @@ import pytest
 
 from homeassistant import config_entries
 from homeassistant.components.bosch_alarm.const import DOMAIN
-from homeassistant.const import CONF_HOST, CONF_MODEL, CONF_PORT
+from homeassistant.const import CONF_CODE, CONF_HOST, CONF_MODEL, CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 
@@ -216,3 +216,52 @@ async def test_entry_already_configured(
 
     await hass.async_block_till_done()
     assert len(mock_setup_entry.mock_calls) == 0
+
+
+@pytest.mark.parametrize(
+    "bosch_alarm_test_data",
+    [
+        "Solution 3000",
+        "AMAX 3000",
+        "B5512 (US1B)",
+    ],
+    indirect=True,
+)
+@pytest.mark.usefixtures("bosch_alarm_test_data")
+async def test_options_flow(
+    hass: HomeAssistant,
+    mock_setup_entry: AsyncMock,
+    bosch_alarm_test_data: MockBoschAlarmConfig,
+) -> None:
+    """Test the options flow for bosch_alarm."""
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={
+            CONF_HOST: "1.1.1.1",
+            CONF_PORT: 7700,
+            CONF_MODEL: bosch_alarm_test_data.model,
+            **bosch_alarm_test_data.config,
+        },
+        version=1,
+        minor_version=2,
+    )
+    config_entry.add_to_hass(hass)
+
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+
+    result = await hass.config_entries.options.async_init(config_entry.entry_id)
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "init"
+
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input={CONF_CODE: "1234"},
+    )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["result"] is True
+
+    assert config_entry.options == {CONF_CODE: "1234"}
+
+    await hass.async_block_till_done()
+    assert len(mock_setup_entry.mock_calls) == 1
