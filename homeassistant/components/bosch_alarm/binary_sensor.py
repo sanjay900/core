@@ -76,7 +76,7 @@ class PointSensor(CoordinatorEntity[BoschAlarmCoordinator], BinarySensorEntity):
     @property
     def available(self) -> bool:
         """Return if this point sensor is available."""
-        return self._point.is_open() or self._point.is_normal()
+        return super().available and (self._point.is_open() or self._point.is_normal())
 
     @property
     def device_class(self) -> BinarySensorDeviceClass | None:
