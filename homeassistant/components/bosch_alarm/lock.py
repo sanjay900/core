@@ -37,7 +37,6 @@ class PanelLockEntity(CoordinatorEntity[BoschAlarmCoordinator], LockEntity):
         """Set up a lock entity for a door on a bosch alarm panel."""
         super().__init__(coordinator, door_id)
         self._door = coordinator.panel.doors[door_id]
-        self._observer = self._door.status_observer
         self._attr_name = self._door.name
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_door_{door_id}"
         self._attr_device_info = DeviceInfo(
@@ -49,11 +48,6 @@ class PanelLockEntity(CoordinatorEntity[BoschAlarmCoordinator], LockEntity):
         )
         self._attr_should_poll = False
         self._door_id = door_id
-
-    @property
-    def name(self) -> str:
-        """Return the name of the door."""
-        return self._door.name
 
     @property
     def is_locked(self) -> bool:
@@ -76,8 +70,8 @@ class PanelLockEntity(CoordinatorEntity[BoschAlarmCoordinator], LockEntity):
     async def async_added_to_hass(self) -> None:
         """Observe state changes."""
         await super().async_added_to_hass()
-        self._observer.attach(self.schedule_update_ha_state)
+        self._door.status_observer.attach(self.schedule_update_ha_state)
 
     async def async_will_remove_from_hass(self) -> None:
         """Stop observing state changes."""
-        self._observer.detach(self.schedule_update_ha_state)
+        self._door.status_observer.detach(self.schedule_update_ha_state)

@@ -32,7 +32,7 @@ async def async_setup_entry(
     )
 
 
-def _guess_device_class(name):
+def _guess_device_class(name: str) -> BinarySensorDeviceClass | None:
     if re.search(r"\b(win(d)?(ow)?|wn)\b", name):
         return BinarySensorDeviceClass.WINDOW
     if re.search(r"\b(door|dr)\b", name):
@@ -79,7 +79,7 @@ class PointSensor(CoordinatorEntity[BoschAlarmCoordinator], BinarySensorEntity):
         return self._point.is_open() or self._point.is_normal()
 
     @property
-    def device_class(self) -> BinarySensorDeviceClass:
+    def device_class(self) -> BinarySensorDeviceClass | None:
         """Return a guess for the device class for this point sensor."""
         return _guess_device_class(self._point.name.lower())
 
@@ -100,7 +100,7 @@ class ConnectionStatusSensor(
 
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator) -> None:
+    def __init__(self, coordinator: BoschAlarmCoordinator) -> None:
         """Set up a binary sensor entity for the connection status in a bosch alarm panel."""
         super().__init__(coordinator)
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_connection_status"
