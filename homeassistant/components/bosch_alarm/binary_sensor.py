@@ -98,13 +98,12 @@ class ConnectionStatusSensor(
     """A binary sensor entity for the connection status in a bosch alarm panel."""
 
     _attr_has_entity_name = True
+    _attr_name = "Connection Status"
 
     def __init__(self, coordinator: BoschAlarmCoordinator) -> None:
         """Set up a binary sensor entity for the connection status in a bosch alarm panel."""
         super().__init__(coordinator)
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_connection_status"
-        self._attr_name = "Connection Status"
-        self._attr_should_poll = False
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
             name=f"Bosch {coordinator.panel.model}",

@@ -100,14 +100,13 @@ class PanelFaultsSensor(CoordinatorEntity[BoschAlarmCoordinator], SensorEntity):
     """A faults sensor entity for a bosch alarm panel."""
 
     _attr_has_entity_name = True
+    _attr_name = "Faults"
 
     def __init__(self, coordinator: BoschAlarmCoordinator) -> None:
         """Set up a faults sensor entity for a bosch alarm panel."""
         super().__init__(coordinator)
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_faults"
-        self._attr_should_poll = False
-        self._attr_name = "Faults"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
             name=f"Bosch {coordinator.panel.model}",
@@ -141,14 +140,13 @@ class FaultingPointsSensor(CoordinatorEntity[BoschAlarmCoordinator], SensorEntit
     """A faults sensor entity for a bosch alarm panel."""
 
     _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator: BoschAlarmCoordinator, area_id: int) -> None:
         """Set up a faults sensor entity for a bosch alarm panel."""
         super().__init__(coordinator)
-        self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._area = coordinator.panel.areas[area_id]
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{area_id}_faults"
-        self._attr_should_poll = False
         self._attr_name = f"{self._area.name} Faulting Points"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
