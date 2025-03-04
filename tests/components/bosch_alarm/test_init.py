@@ -23,7 +23,7 @@ def disable_platform_only():
     [("Solution 3000", PermissionError()), ("Solution 3000", TimeoutError())],
     indirect=["bosch_alarm_test_data"],
 )
-async def test_incorrect_auth(
+async def test_init_exceptions(
     hass: HomeAssistant,
     bosch_alarm_test_data: MockBoschAlarmConfig,
     bosch_config_entry: MockConfigEntry,

@@ -313,3 +313,67 @@ async def test_options_flow(
 
     await hass.async_block_till_done()
     assert len(mock_setup_entry.mock_calls) == 1
+
+
+@pytest.mark.parametrize(
+    "bosch_alarm_test_data",
+    [
+        "Solution 3000",
+        "AMAX 3000",
+        "B5512 (US1B)",
+    ],
+    indirect=["bosch_alarm_test_data"],
+)
+async def test_reauth_flow(
+    hass: HomeAssistant,
+    bosch_alarm_test_data: MockBoschAlarmConfig,
+    bosch_config_entry: MockConfigEntry,
+) -> None:
+    """Test errors with incorrect auth."""
+    bosch_alarm_test_data.side_effect = PermissionError()
+    bosch_config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id) is False
+    await hass.async_block_till_done()
+    result = next(
+        bosch_config_entry.async_get_active_flows(
+            hass, {config_entries.SOURCE_RECONFIGURE, config_entries.SOURCE_REAUTH}
+        )
+    )
+
+    bosch_alarm_test_data.config = {
+        k: f"{v}2" for k, v in bosch_alarm_test_data.config.items()
+    }
+
+    assert result["step_id"] == "reauth_confirm"
+    # Check if reauth fails if the alarm returns a permission error
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input=bosch_alarm_test_data.config,
+    )
+    assert result["step_id"] == "reauth_confirm"
+    assert result["errors"]["base"] == "invalid_auth"
+    # Check if reauth fails if the alarm returns a connection error
+    bosch_alarm_test_data.side_effect = OSError()
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input=bosch_alarm_test_data.config,
+    )
+    assert result["step_id"] == "reauth_confirm"
+    assert result["errors"]["base"] == "cannot_connect"
+    # Check if reauth fails if the alarm returns a unknown error
+    bosch_alarm_test_data.side_effect = Exception()
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input=bosch_alarm_test_data.config,
+    )
+    assert result["step_id"] == "reauth_confirm"
+    assert result["errors"]["base"] == "unknown"
+    # Now check it works when there are no errors
+    bosch_alarm_test_data.side_effect = None
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input=bosch_alarm_test_data.config,
+    )
+    assert result["reason"] == "reauth_successful"
+    compare = {**bosch_config_entry.data, **bosch_alarm_test_data.config}
+    assert compare == bosch_config_entry.data
