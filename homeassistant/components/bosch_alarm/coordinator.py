@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 type BoschAlarmConfigEntry = ConfigEntry[BoschAlarmCoordinator]
 
 
-class BoschAlarmCoordinator(DataUpdateCoordinator[Panel]):
+class BoschAlarmCoordinator(DataUpdateCoordinator[None]):
     """Bosch alarm coordinator."""
 
     config_entry: BoschAlarmConfigEntry
@@ -66,8 +66,8 @@ class BoschAlarmCoordinator(DataUpdateCoordinator[Panel]):
             await self.panel.disconnect()
             raise ConfigEntryNotReady("Connection failed") from err
 
-    async def _async_update_data(self) -> Panel:
-        return self.panel
+    async def _async_update_data(self) -> None:
+        pass
 
     async def async_shutdown(self) -> None:
         """Run shutdown clean up."""

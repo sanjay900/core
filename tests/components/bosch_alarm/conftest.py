@@ -109,11 +109,14 @@ def bosch_alarm_test_data_fixture(
 
 
 @pytest.fixture(name="bosch_config_entry")
-def bosch_config_entry_fixture(bosch_alarm_test_data: MockBoschAlarmConfig):
+def bosch_config_entry_fixture(
+    bosch_alarm_test_data: MockBoschAlarmConfig,
+) -> Generator[MockConfigEntry]:
     """Mock config entry for bosch alarm."""
     return MockConfigEntry(
         domain=DOMAIN,
         unique_id="unique_id",
+        entry_id=bosch_alarm_test_data.model,
         data={
             CONF_HOST: "0.0.0.0",
             CONF_PORT: 7700,

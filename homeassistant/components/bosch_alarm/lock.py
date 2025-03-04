@@ -46,7 +46,6 @@ class PanelLockEntity(CoordinatorEntity[BoschAlarmCoordinator], LockEntity):
             model=coordinator.panel.model,
             sw_version=coordinator.panel.firmware_version,
         )
-        self._attr_should_poll = False
         self._door_id = door_id
 
     @property

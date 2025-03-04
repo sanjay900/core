@@ -58,14 +58,13 @@ class PanelHistorySensor(CoordinatorEntity[BoschAlarmCoordinator], SensorEntity)
     """A history sensor entity for a bosch alarm panel."""
 
     _attr_has_entity_name = True
+    _attr_name = "History"
 
     def __init__(self, coordinator: BoschAlarmCoordinator) -> None:
         """Set up a history sensor entity for a bosch alarm panel."""
         super().__init__(coordinator)
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_history"
-        self._attr_should_poll = False
-        self._attr_name = "History"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
             name=f"Bosch {coordinator.panel.model}",

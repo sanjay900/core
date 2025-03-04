@@ -49,7 +49,6 @@ class PanelOutputEntity(CoordinatorEntity[BoschAlarmCoordinator], SwitchEntity):
             sw_version=coordinator.panel.firmware_version,
         )
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_output_{output_id}"
-        self._attr_should_poll = False
 
     async def async_added_to_hass(self) -> None:
         """Observe state changes."""

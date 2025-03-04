@@ -59,7 +59,6 @@ class PointSensor(CoordinatorEntity[BoschAlarmCoordinator], BinarySensorEntity):
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_point_{point_id}"
         self._point = coordinator.panel.points[point_id]
         self._attr_name = self._point.name
-        self._attr_should_poll = False
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
             name=f"Bosch {coordinator.panel.model}",
