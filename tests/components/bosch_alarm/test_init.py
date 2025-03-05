@@ -19,9 +19,12 @@ def disable_platform_only():
 
 
 @pytest.mark.parametrize(
-    ("bosch_alarm_test_data", "exception"),
-    [("Solution 3000", PermissionError()), ("Solution 3000", TimeoutError())],
-    indirect=["bosch_alarm_test_data"],
+    ("bosch_alarm_test_data", "bosch_config_entry", "exception"),
+    [
+        ("Solution 3000", None, PermissionError()),
+        ("Solution 3000", None, TimeoutError()),
+    ],
+    indirect=["bosch_alarm_test_data", "bosch_config_entry"],
 )
 async def test_init_exceptions(
     hass: HomeAssistant,

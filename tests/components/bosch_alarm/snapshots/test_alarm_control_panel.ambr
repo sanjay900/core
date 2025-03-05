@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_alarm_control_panel[AMAX 3000][alarm_control_panel.bosch_amax_3000_area1-entry]
+# name: test_alarm_control_panel[AMAX 3000-None][alarm_control_panel.bosch_amax_3000_area1-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -33,7 +33,7 @@
     'unit_of_measurement': None,
   })
 # ---
-# name: test_alarm_control_panel[AMAX 3000][alarm_control_panel.bosch_amax_3000_area1-state]
+# name: test_alarm_control_panel[AMAX 3000-None][alarm_control_panel.bosch_amax_3000_area1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'changed_by': None,
@@ -50,7 +50,7 @@
     'state': 'disarmed',
   })
 # ---
-# name: test_alarm_control_panel[B5512 (US1B)][alarm_control_panel.bosch_b5512_us1b_area1-entry]
+# name: test_alarm_control_panel[B5512 (US1B)-None][alarm_control_panel.bosch_b5512_us1b_area1-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -84,7 +84,7 @@
     'unit_of_measurement': None,
   })
 # ---
-# name: test_alarm_control_panel[B5512 (US1B)][alarm_control_panel.bosch_b5512_us1b_area1-state]
+# name: test_alarm_control_panel[B5512 (US1B)-None][alarm_control_panel.bosch_b5512_us1b_area1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'changed_by': None,
@@ -101,7 +101,7 @@
     'state': 'disarmed',
   })
 # ---
-# name: test_alarm_control_panel[Solution 3000][alarm_control_panel.bosch_solution_3000_area1-entry]
+# name: test_alarm_control_panel[Solution 3000-None][alarm_control_panel.bosch_solution_3000_area1-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -135,7 +135,7 @@
     'unit_of_measurement': None,
   })
 # ---
-# name: test_alarm_control_panel[Solution 3000][alarm_control_panel.bosch_solution_3000_area1-state]
+# name: test_alarm_control_panel[Solution 3000-None][alarm_control_panel.bosch_solution_3000_area1-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'changed_by': None,

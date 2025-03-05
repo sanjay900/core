@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_switch[AMAX 3000][switch.bosch_amax_3000_output_a-entry]
+# name: test_switch[AMAX 3000-None][switch.bosch_amax_3000_output_a-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -33,7 +33,7 @@
     'unit_of_measurement': None,
   })
 # ---
-# name: test_switch[AMAX 3000][switch.bosch_amax_3000_output_a-state]
+# name: test_switch[AMAX 3000-None][switch.bosch_amax_3000_output_a-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'Bosch AMAX 3000 Output A',
@@ -43,10 +43,10 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': 'on',
+    'state': 'off',
   })
 # ---
-# name: test_switch[B5512 (US1B)][switch.bosch_b5512_us1b_output_a-entry]
+# name: test_switch[B5512 (US1B)-None][switch.bosch_b5512_us1b_output_a-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -80,7 +80,7 @@
     'unit_of_measurement': None,
   })
 # ---
-# name: test_switch[B5512 (US1B)][switch.bosch_b5512_us1b_output_a-state]
+# name: test_switch[B5512 (US1B)-None][switch.bosch_b5512_us1b_output_a-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'Bosch B5512 (US1B) Output A',
@@ -90,10 +90,10 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': 'on',
+    'state': 'off',
   })
 # ---
-# name: test_switch[Solution 3000][switch.bosch_solution_3000_output_a-entry]
+# name: test_switch[Solution 3000-None][switch.bosch_solution_3000_output_a-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -127,7 +127,7 @@
     'unit_of_measurement': None,
   })
 # ---
-# name: test_switch[Solution 3000][switch.bosch_solution_3000_output_a-state]
+# name: test_switch[Solution 3000-None][switch.bosch_solution_3000_output_a-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'Bosch Solution 3000 Output A',
@@ -137,6 +137,6 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': 'on',
+    'state': 'off',
   })
 # ---

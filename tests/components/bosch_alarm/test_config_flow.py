@@ -316,13 +316,13 @@ async def test_options_flow(
 
 
 @pytest.mark.parametrize(
-    "bosch_alarm_test_data",
+    ("bosch_alarm_test_data", "bosch_config_entry"),
     [
-        "Solution 3000",
-        "AMAX 3000",
-        "B5512 (US1B)",
+        ("Solution 3000", None),
+        ("AMAX 3000", None),
+        ("B5512 (US1B)", None),
     ],
-    indirect=["bosch_alarm_test_data"],
+    indirect=True,
 )
 async def test_reauth_flow(
     hass: HomeAssistant,

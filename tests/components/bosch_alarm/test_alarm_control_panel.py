@@ -11,9 +11,15 @@ from homeassistant.components.alarm_control_panel import (
     DOMAIN as ALARM_DOMAIN,
     AlarmControlPanelState,
 )
-from homeassistant.const import ATTR_ENTITY_ID, Platform
+from homeassistant.components.bosch_alarm.alarm_control_panel import (
+    DATETIME_ATTR,
+    SET_DATE_TIME_SERVICE_NAME,
+)
+from homeassistant.components.bosch_alarm.const import DOMAIN
+from homeassistant.const import ATTR_CODE, ATTR_ENTITY_ID, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
+from homeassistant.util import dt as dt_util
 
 from .conftest import MockBoschAlarmConfig
 
@@ -30,8 +36,33 @@ async def platforms() -> AsyncGenerator[None]:
 
 
 @pytest.mark.parametrize(
-    "bosch_alarm_test_data",
-    ["Solution 3000"],
+    ("bosch_alarm_test_data", "bosch_config_entry"),
+    [
+        ("Solution 3000", None),
+        ("AMAX 3000", None),
+        ("B5512 (US1B)", None),
+    ],
+    indirect=True,
+)
+async def test_alarm_control_panel(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    snapshot: SnapshotAssertion,
+    bosch_config_entry: MockConfigEntry,
+) -> None:
+    """Test the alarm_control_panel state."""
+    bosch_config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    await snapshot_platform(
+        hass, entity_registry, snapshot, bosch_config_entry.entry_id
+    )
+
+
+@pytest.mark.parametrize(
+    ("bosch_alarm_test_data", "bosch_config_entry"),
+    [("Solution 3000", None)],
     indirect=True,
 )
 async def test_update_alarm_device(
@@ -81,29 +112,80 @@ async def test_update_alarm_device(
     )
     await hass.async_block_till_done()
     assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
-    assert await hass.config_entries.async_unload(bosch_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
-    "bosch_alarm_test_data",
-    [
-        "Solution 3000",
-        "AMAX 3000",
-        "B5512 (US1B)",
-    ],
+    ("bosch_alarm_test_data", "bosch_config_entry"),
+    [("Solution 3000", "1234"), ("Solution 3000", "abcdef")],
     indirect=True,
 )
-async def test_alarm_control_panel(
+async def test_update_alarm_device_with_incorrect_code(
     hass: HomeAssistant,
-    entity_registry: er.EntityRegistry,
-    snapshot: SnapshotAssertion,
+    bosch_alarm_test_data: MockBoschAlarmConfig,
     bosch_config_entry: MockConfigEntry,
 ) -> None:
-    """Test the alarm_control_panel state."""
+    """Test that alarm panel state does not change if a panel is armed with the wrong code."""
     bosch_config_entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
     await hass.async_block_till_done()
+    entity_id = "alarm_control_panel.bosch_solution_3000_area1"
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
+    await hass.services.async_call(
+        ALARM_DOMAIN,
+        "alarm_arm_away",
+        {ATTR_ENTITY_ID: entity_id, ATTR_CODE: "12345"},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
 
-    await snapshot_platform(
-        hass, entity_registry, snapshot, bosch_config_entry.entry_id
+
+@pytest.mark.parametrize(
+    ("bosch_alarm_test_data", "bosch_config_entry"),
+    [("Solution 3000", "12345"), ("Solution 3000", "abcdef")],
+    indirect=True,
+)
+async def test_update_alarm_device_with_code(
+    hass: HomeAssistant,
+    bosch_alarm_test_data: MockBoschAlarmConfig,
+    bosch_config_entry: MockConfigEntry,
+) -> None:
+    """Test that alarm panel state changes after arming the panel with a code."""
+    bosch_config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
+    await hass.async_block_till_done()
+    entity_id = "alarm_control_panel.bosch_solution_3000_area1"
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
+    await hass.services.async_call(
+        ALARM_DOMAIN,
+        "alarm_arm_away",
+        {ATTR_ENTITY_ID: entity_id, ATTR_CODE: bosch_config_entry.options[ATTR_CODE]},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.ARMING
+    await asyncio.sleep(0.1)
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.ARMED_AWAY
+
+
+@pytest.mark.parametrize(
+    ("bosch_alarm_test_data", "bosch_config_entry"),
+    [("Solution 3000", None)],
+    indirect=True,
+)
+async def test_set_date_time_service(
+    hass: HomeAssistant,
+    bosch_alarm_test_data: MockBoschAlarmConfig,
+    bosch_config_entry: MockConfigEntry,
+) -> None:
+    """Test that alarm panel state changes after arming the panel."""
+    bosch_config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
+    await hass.async_block_till_done()
+    entity_id = "alarm_control_panel.bosch_solution_3000_area1"
+    await hass.services.async_call(
+        DOMAIN,
+        SET_DATE_TIME_SERVICE_NAME,
+        {ATTR_ENTITY_ID: entity_id, DATETIME_ATTR: dt_util.now()},
+        blocking=True,
     )
