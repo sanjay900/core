@@ -58,6 +58,14 @@
       }
     }
   },
+  "exceptions": {
+    "integration_not_found": {
+      "message": "Integration \"{target}\" not found in registry."
+    },
+    "not_loaded": {
+      "message": "{target} is not loaded."
+    }
+  },
   "services": {
     "set_date_time": {
       "name": "Set the Date & Time on the panel",
@@ -66,6 +74,10 @@
         "datetime": {
           "name": "Date & Time to set",
           "description": "The date/time to set. The time zone of the Home Assistant instance is assumed. Defaults to current date/time if unset."
+        },
+        "config_entry_id": {
+          "name": "Integration ID",
+          "description": "The Bosch Alarm Integration ID."
         }
       }
     }

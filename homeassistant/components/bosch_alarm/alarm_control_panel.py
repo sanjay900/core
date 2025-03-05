@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import datetime as dt
-from typing import Any
-
 import voluptuous as vol
 
 from homeassistant.components.alarm_control_panel import (
@@ -15,11 +12,10 @@ from homeassistant.components.alarm_control_panel import (
 )
 from homeassistant.const import CONF_CODE
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import config_validation as cv, entity_platform
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 from .coordinator import BoschAlarmConfigEntry, BoschAlarmCoordinator
@@ -46,10 +42,9 @@ async def async_setup_entry(
         )
         for area_id in coordinator.panel.areas
     )
-    platform = entity_platform.async_get_current_platform()
-    platform.async_register_entity_service(
-        SET_DATE_TIME_SERVICE_NAME, SET_DATE_TIME_SCHEMA, "set_panel_date"
-    )
+
+
+PARALLEL_UPDATES = 0
 
 
 class AreaAlarmControlPanel(
@@ -139,8 +134,3 @@ class AreaAlarmControlPanel(
     async def async_will_remove_from_hass(self) -> None:
         """Run when entity removed from hass."""
         self._area.status_observer.detach(self.schedule_update_ha_state)
-
-    async def set_panel_date(self, **kwargs: Any) -> None:
-        """Set the date and time on a bosch alarm panel."""
-        value: dt.datetime = kwargs.get(DATETIME_ATTR, dt_util.now())
-        await self.coordinator.panel.set_panel_date(value)

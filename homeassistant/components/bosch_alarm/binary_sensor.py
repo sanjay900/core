@@ -48,6 +48,9 @@ def _guess_device_class(name: str) -> BinarySensorDeviceClass | None:
     return None
 
 
+PARALLEL_UPDATES = 0
+
+
 class PointSensor(CoordinatorEntity[BoschAlarmCoordinator], BinarySensorEntity):
     """A binary sensor entity for a point in a bosch alarm panel."""
 

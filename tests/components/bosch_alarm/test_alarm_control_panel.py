@@ -11,15 +11,9 @@ from homeassistant.components.alarm_control_panel import (
     DOMAIN as ALARM_DOMAIN,
     AlarmControlPanelState,
 )
-from homeassistant.components.bosch_alarm.alarm_control_panel import (
-    DATETIME_ATTR,
-    SET_DATE_TIME_SERVICE_NAME,
-)
-from homeassistant.components.bosch_alarm.const import DOMAIN
 from homeassistant.const import ATTR_CODE, ATTR_ENTITY_ID, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
-from homeassistant.util import dt as dt_util
 
 from .conftest import MockBoschAlarmConfig
 
@@ -166,26 +160,3 @@ async def test_update_alarm_device_with_code(
     assert hass.states.get(entity_id).state == AlarmControlPanelState.ARMING
     await asyncio.sleep(0.1)
     assert hass.states.get(entity_id).state == AlarmControlPanelState.ARMED_AWAY
-
-
-@pytest.mark.parametrize(
-    ("bosch_alarm_test_data", "bosch_config_entry"),
-    [("Solution 3000", None)],
-    indirect=True,
-)
-async def test_set_date_time_service(
-    hass: HomeAssistant,
-    bosch_alarm_test_data: MockBoschAlarmConfig,
-    bosch_config_entry: MockConfigEntry,
-) -> None:
-    """Test that alarm panel state changes after arming the panel."""
-    bosch_config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
-    await hass.async_block_till_done()
-    entity_id = "alarm_control_panel.bosch_solution_3000_area1"
-    await hass.services.async_call(
-        DOMAIN,
-        SET_DATE_TIME_SERVICE_NAME,
-        {ATTR_ENTITY_ID: entity_id, DATETIME_ATTR: dt_util.now()},
-        blocking=True,
-    )

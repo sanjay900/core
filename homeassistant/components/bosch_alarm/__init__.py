@@ -4,8 +4,14 @@ from __future__ import annotations
 
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.typing import ConfigType
 
+from .const import DOMAIN
 from .coordinator import BoschAlarmConfigEntry, BoschAlarmCoordinator
+from .services import setup_services
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 PLATFORMS: list[Platform] = [
     Platform.ALARM_CONTROL_PANEL,
@@ -14,6 +20,12 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
     Platform.SWITCH,
 ]
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Set up bosch alarm."""
+    setup_services(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: BoschAlarmConfigEntry) -> bool:

@@ -54,6 +54,9 @@ async def async_setup_entry(
     )
 
 
+PARALLEL_UPDATES = 0
+
+
 class PanelHistorySensor(CoordinatorEntity[BoschAlarmCoordinator], SensorEntity):
     """A history sensor entity for a bosch alarm panel."""
 

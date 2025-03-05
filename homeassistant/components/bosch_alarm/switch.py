@@ -29,6 +29,9 @@ async def async_setup_entry(
     )
 
 
+PARALLEL_UPDATES = 0
+
+
 class PanelOutputEntity(CoordinatorEntity[BoschAlarmCoordinator], SwitchEntity):
     """An output entity for a bosch alarm panel."""
 
