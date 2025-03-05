@@ -1,9 +1,6 @@
 rules:
   # Bronze
-  action-setup:
-    status: exempt
-    comment: |
-      No custom actions defined
+  action-setup: done
   appropriate-polling: done
   brands: done
   common-modules: done
@@ -26,10 +23,7 @@ rules:
   unique-config-entry: done
 
   # Silver
-  action-exceptions:
-    status: exempt
-    comment: |
-      No custom actions are defined.
+  action-exceptions: done
   config-entry-unloading: done
   docs-configuration-parameters: todo
   docs-installation-parameters: todo
