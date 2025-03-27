@@ -1,7 +1,7 @@
 """Tests for Bosch Alarm component."""
 
 from collections.abc import AsyncGenerator
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from syrupy.assertion import SnapshotAssertion
@@ -11,7 +11,7 @@ from homeassistant.const import ATTR_ENTITY_ID, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
-from .conftest import MockBoschAlarmConfig
+from . import call_observable, setup_integration
 
 from tests.common import MockConfigEntry, snapshot_platform
 
@@ -23,21 +23,16 @@ async def platforms() -> AsyncGenerator[None]:
         yield
 
 
-@pytest.mark.parametrize(
-    ("bosch_alarm_test_data", "bosch_config_entry"),
-    [("Solution 3000", None)],
-    indirect=True,
-)
 async def test_update_lock_device(
     hass: HomeAssistant,
-    bosch_alarm_test_data: MockBoschAlarmConfig,
-    bosch_config_entry: MockConfigEntry,
+    mock_panel: AsyncMock,
+    door: AsyncMock,
+    entity_id: str,
+    mock_config_entry: MockConfigEntry,
 ) -> None:
-    """Test that alarm panel state changes after arming the panel."""
-    bosch_config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
-    await hass.async_block_till_done()
-    entity_id = "lock.bosch_solution_3000_main_door"
+    """Test that lock stats update when locking and unlocking the door."""
+    await setup_integration(hass, mock_config_entry)
+    entity_id = f"lock.{entity_id}_main_door"
     assert hass.states.get(entity_id).state == LockState.LOCKED
     await hass.services.async_call(
         LOCK_DOMAIN,
@@ -45,7 +40,9 @@ async def test_update_lock_device(
         {ATTR_ENTITY_ID: entity_id},
         blocking=True,
     )
-    await hass.async_block_till_done()
+    door.is_locked.return_value = False
+    door.is_open.return_value = True
+    await call_observable(hass, door.status_observer)
     assert hass.states.get(entity_id).state == LockState.UNLOCKED
     await hass.services.async_call(
         LOCK_DOMAIN,
@@ -53,30 +50,21 @@ async def test_update_lock_device(
         {ATTR_ENTITY_ID: entity_id},
         blocking=True,
     )
+    door.is_locked.return_value = True
+    door.is_open.return_value = False
+    await call_observable(hass, door.status_observer)
     await hass.async_block_till_done()
     assert hass.states.get(entity_id).state == LockState.LOCKED
 
 
-@pytest.mark.parametrize(
-    ("bosch_alarm_test_data", "bosch_config_entry"),
-    [
-        ("Solution 3000", None),
-        ("AMAX 3000", None),
-        ("B5512 (US1B)", None),
-    ],
-    indirect=True,
-)
 async def test_lock(
     hass: HomeAssistant,
     entity_registry: er.EntityRegistry,
     snapshot: SnapshotAssertion,
-    bosch_config_entry: MockConfigEntry,
+    mock_panel: AsyncMock,
+    mock_config_entry: MockConfigEntry,
 ) -> None:
     """Test the lock state."""
-    bosch_config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
-    await hass.async_block_till_done()
+    await setup_integration(hass, mock_config_entry)
 
-    await snapshot_platform(
-        hass, entity_registry, snapshot, bosch_config_entry.entry_id
-    )
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)

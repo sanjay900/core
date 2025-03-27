@@ -13,6 +13,7 @@ from homeassistant.components.alarm_control_panel import (
 )
 from homeassistant.const import CONF_CODE
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -106,24 +107,29 @@ class AreaAlarmControlPanel(AlarmControlPanelEntity):
             return AlarmControlPanelState.ARMED_AWAY
         return None
 
-    def _arming_code_correct(self, code: str | None) -> bool:
+    def _check_code_correct(self, code: str | None) -> None:
         """Validate a given code is correct for this panel."""
-        return bool(code == self._arming_code)
+        if code != self._arming_code:
+            raise ServiceValidationError(
+                "Invalid alarm code provided",
+                translation_domain=DOMAIN,
+                translation_key="invalid_code",
+            )
 
     async def async_alarm_disarm(self, code: str | None = None) -> None:
         """Disarm this panel."""
-        if self._arming_code_correct(code):
-            await self.panel.area_disarm(self._area_id)
+        self._check_code_correct(code)
+        await self.panel.area_disarm(self._area_id)
 
     async def async_alarm_arm_home(self, code: str | None = None) -> None:
         """Send arm home command."""
-        if self._arming_code_correct(code):
-            await self.panel.area_arm_part(self._area_id)
+        self._check_code_correct(code)
+        await self.panel.area_arm_part(self._area_id)
 
     async def async_alarm_arm_away(self, code: str | None = None) -> None:
         """Send arm away command."""
-        if self._arming_code_correct(code):
-            await self.panel.area_arm_all(self._area_id)
+        self._check_code_correct(code)
+        await self.panel.area_arm_all(self._area_id)
 
     @property
     def available(self) -> bool:

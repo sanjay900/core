@@ -19,7 +19,7 @@ from .const import (
     DOMAIN,
     SET_DATE_TIME_SERVICE_NAME,
 )
-from .coordinator import BoschAlarmConfigEntry
+from .types import BoschAlarmConfigEntry
 
 SET_DATE_TIME_SCHEMA = vol.Schema(
     {
@@ -49,9 +49,9 @@ def setup_services(hass: HomeAssistant) -> None:
                     translation_key="not_loaded",
                     translation_placeholders={"target": config_entry.title},
                 )
-            coordinator = config_entry.runtime_data
+            panel = config_entry.runtime_data
             try:
-                await coordinator.panel.set_panel_date(value)
+                await panel.set_panel_date(value)
             except ValueError as err:
                 raise ServiceValidationError(
                     translation_domain=DOMAIN, translation_key="incorrect_year"

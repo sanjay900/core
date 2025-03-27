@@ -1,5 +1,52 @@
 # serializer version: 1
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_co_detector-entry]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_bedroom-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.bosch_amax_3000_bedroom',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Bedroom',
+    'platform': 'bosch_alarm',
+    'previous_unique_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_6',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_bedroom-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Bosch AMAX 3000 Bedroom',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.bosch_amax_3000_bedroom',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_co_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -29,11 +76,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_point_4',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_3',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_co_detector-state]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_co_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'carbon_monoxide',
@@ -47,55 +94,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_connection_status-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': None,
-    'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'binary_sensor',
-    'entity_category': None,
-    'entity_id': 'binary_sensor.bosch_amax_3000_connection_status',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
-    'original_icon': None,
-    'original_name': 'Connection Status',
-    'platform': 'bosch_alarm',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': None,
-    'unique_id': 'AMAX 3000_connection_status',
-    'unit_of_measurement': None,
-  })
-# ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_connection_status-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'connectivity',
-      'friendly_name': 'Bosch AMAX 3000 Connection Status',
-    }),
-    'context': <ANY>,
-    'entity_id': 'binary_sensor.bosch_amax_3000_connection_status',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_door-entry]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_door-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -125,11 +124,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_point_2',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_1',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_door-state]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_door-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'door',
@@ -143,7 +142,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_glassbreak_detector-entry]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_glassbreak_sensor-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -156,7 +155,7 @@
     'disabled_by': None,
     'domain': 'binary_sensor',
     'entity_category': None,
-    'entity_id': 'binary_sensor.bosch_amax_3000_glassbreak_detector',
+    'entity_id': 'binary_sensor.bosch_amax_3000_glassbreak_sensor',
     'has_entity_name': True,
     'hidden_by': None,
     'icon': None,
@@ -168,30 +167,30 @@
     }),
     'original_device_class': <BinarySensorDeviceClass.TAMPER: 'tamper'>,
     'original_icon': None,
-    'original_name': 'GlassBreak Detector',
+    'original_name': 'Glassbreak Sensor',
     'platform': 'bosch_alarm',
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_point_6',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_5',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_glassbreak_detector-state]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_glassbreak_sensor-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'tamper',
-      'friendly_name': 'Bosch AMAX 3000 GlassBreak Detector',
+      'friendly_name': 'Bosch AMAX 3000 Glassbreak Sensor',
     }),
     'context': <ANY>,
-    'entity_id': 'binary_sensor.bosch_amax_3000_glassbreak_detector',
+    'entity_id': 'binary_sensor.bosch_amax_3000_glassbreak_sensor',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_motion_detector-entry]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_motion_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -221,11 +220,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_point_3',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_2',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_motion_detector-state]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_motion_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'motion',
@@ -239,7 +238,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_smoke_detector-entry]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_smoke_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -269,11 +268,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_point_5',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_4',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_smoke_detector-state]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_smoke_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'smoke',
@@ -287,7 +286,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_window-entry]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_window-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -317,11 +316,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_point_1',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_0',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[AMAX 3000-None][binary_sensor.bosch_amax_3000_window-state]
+# name: test_binary_sensor[None-None-amax_3000][binary_sensor.bosch_amax_3000_window-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'window',
@@ -335,7 +334,54 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_co_detector-entry]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_bedroom-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.bosch_b5512_us1b_bedroom',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Bedroom',
+    'platform': 'bosch_alarm',
+    'previous_unique_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_6',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_bedroom-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Bosch B5512 (US1B) Bedroom',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.bosch_b5512_us1b_bedroom',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_co_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -365,11 +411,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_point_4',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_3',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_co_detector-state]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_co_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'carbon_monoxide',
@@ -383,55 +429,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_connection_status-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': None,
-    'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'binary_sensor',
-    'entity_category': None,
-    'entity_id': 'binary_sensor.bosch_b5512_us1b_connection_status',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
-    'original_icon': None,
-    'original_name': 'Connection Status',
-    'platform': 'bosch_alarm',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': None,
-    'unique_id': 'B5512 (US1B)_connection_status',
-    'unit_of_measurement': None,
-  })
-# ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_connection_status-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'connectivity',
-      'friendly_name': 'Bosch B5512 (US1B) Connection Status',
-    }),
-    'context': <ANY>,
-    'entity_id': 'binary_sensor.bosch_b5512_us1b_connection_status',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_door-entry]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_door-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -461,11 +459,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_point_2',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_1',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_door-state]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_door-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'door',
@@ -479,7 +477,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_glassbreak_detector-entry]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_glassbreak_sensor-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -492,7 +490,7 @@
     'disabled_by': None,
     'domain': 'binary_sensor',
     'entity_category': None,
-    'entity_id': 'binary_sensor.bosch_b5512_us1b_glassbreak_detector',
+    'entity_id': 'binary_sensor.bosch_b5512_us1b_glassbreak_sensor',
     'has_entity_name': True,
     'hidden_by': None,
     'icon': None,
@@ -504,30 +502,30 @@
     }),
     'original_device_class': <BinarySensorDeviceClass.TAMPER: 'tamper'>,
     'original_icon': None,
-    'original_name': 'GlassBreak Detector',
+    'original_name': 'Glassbreak Sensor',
     'platform': 'bosch_alarm',
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_point_6',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_5',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_glassbreak_detector-state]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_glassbreak_sensor-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'tamper',
-      'friendly_name': 'Bosch B5512 (US1B) GlassBreak Detector',
+      'friendly_name': 'Bosch B5512 (US1B) Glassbreak Sensor',
     }),
     'context': <ANY>,
-    'entity_id': 'binary_sensor.bosch_b5512_us1b_glassbreak_detector',
+    'entity_id': 'binary_sensor.bosch_b5512_us1b_glassbreak_sensor',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_motion_detector-entry]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_motion_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -557,11 +555,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_point_3',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_2',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_motion_detector-state]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_motion_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'motion',
@@ -575,7 +573,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_smoke_detector-entry]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_smoke_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -605,11 +603,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_point_5',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_4',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_smoke_detector-state]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_smoke_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'smoke',
@@ -623,7 +621,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_window-entry]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_window-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -653,11 +651,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_point_1',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_point_0',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[B5512 (US1B)-None][binary_sensor.bosch_b5512_us1b_window-state]
+# name: test_binary_sensor[None-None-b5512][binary_sensor.bosch_b5512_us1b_window-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'window',
@@ -671,7 +669,54 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_co_detector-entry]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_bedroom-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'binary_sensor',
+    'entity_category': None,
+    'entity_id': 'binary_sensor.bosch_solution_3000_bedroom',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Bedroom',
+    'platform': 'bosch_alarm',
+    'previous_unique_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': '1234567890_point_6',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_bedroom-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Bosch Solution 3000 Bedroom',
+    }),
+    'context': <ANY>,
+    'entity_id': 'binary_sensor.bosch_solution_3000_bedroom',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'off',
+  })
+# ---
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_co_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -701,11 +746,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_point_4',
+    'unique_id': '1234567890_point_3',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_co_detector-state]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_co_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'carbon_monoxide',
@@ -719,55 +764,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_connection_status-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': None,
-    'config_entry_id': <ANY>,
-    'config_subentry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'binary_sensor',
-    'entity_category': None,
-    'entity_id': 'binary_sensor.bosch_solution_3000_connection_status',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <BinarySensorDeviceClass.CONNECTIVITY: 'connectivity'>,
-    'original_icon': None,
-    'original_name': 'Connection Status',
-    'platform': 'bosch_alarm',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': None,
-    'unique_id': 'Solution 3000_connection_status',
-    'unit_of_measurement': None,
-  })
-# ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_connection_status-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'connectivity',
-      'friendly_name': 'Bosch Solution 3000 Connection Status',
-    }),
-    'context': <ANY>,
-    'entity_id': 'binary_sensor.bosch_solution_3000_connection_status',
-    'last_changed': <ANY>,
-    'last_reported': <ANY>,
-    'last_updated': <ANY>,
-    'state': 'off',
-  })
-# ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_door-entry]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_door-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -797,11 +794,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_point_2',
+    'unique_id': '1234567890_point_1',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_door-state]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_door-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'door',
@@ -815,7 +812,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_glassbreak_detector-entry]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_glassbreak_sensor-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -828,7 +825,7 @@
     'disabled_by': None,
     'domain': 'binary_sensor',
     'entity_category': None,
-    'entity_id': 'binary_sensor.bosch_solution_3000_glassbreak_detector',
+    'entity_id': 'binary_sensor.bosch_solution_3000_glassbreak_sensor',
     'has_entity_name': True,
     'hidden_by': None,
     'icon': None,
@@ -840,30 +837,30 @@
     }),
     'original_device_class': <BinarySensorDeviceClass.TAMPER: 'tamper'>,
     'original_icon': None,
-    'original_name': 'GlassBreak Detector',
+    'original_name': 'Glassbreak Sensor',
     'platform': 'bosch_alarm',
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_point_6',
+    'unique_id': '1234567890_point_5',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_glassbreak_detector-state]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_glassbreak_sensor-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'tamper',
-      'friendly_name': 'Bosch Solution 3000 GlassBreak Detector',
+      'friendly_name': 'Bosch Solution 3000 Glassbreak Sensor',
     }),
     'context': <ANY>,
-    'entity_id': 'binary_sensor.bosch_solution_3000_glassbreak_detector',
+    'entity_id': 'binary_sensor.bosch_solution_3000_glassbreak_sensor',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_motion_detector-entry]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_motion_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -893,11 +890,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_point_3',
+    'unique_id': '1234567890_point_2',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_motion_detector-state]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_motion_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'motion',
@@ -911,7 +908,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_smoke_detector-entry]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_smoke_detector-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -941,11 +938,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_point_5',
+    'unique_id': '1234567890_point_4',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_smoke_detector-state]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_smoke_detector-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'smoke',
@@ -959,7 +956,7 @@
     'state': 'off',
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_window-entry]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_window-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -989,11 +986,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_point_1',
+    'unique_id': '1234567890_point_0',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_binary_sensor[Solution 3000-None][binary_sensor.bosch_solution_3000_window-state]
+# name: test_binary_sensor[None-None-solution_3000][binary_sensor.bosch_solution_3000_window-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'window',

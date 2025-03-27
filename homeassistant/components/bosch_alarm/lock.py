@@ -4,14 +4,15 @@ from __future__ import annotations
 
 from typing import Any
 
+from bosch_alarm_mode2 import Panel
+
 from homeassistant.components.lock import LockEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
-from .coordinator import BoschAlarmConfigEntry, BoschAlarmCoordinator
+from .types import BoschAlarmConfigEntry
 
 
 async def async_setup_entry(
@@ -21,33 +22,38 @@ async def async_setup_entry(
 ) -> None:
     """Set up lock entities for each door."""
 
-    coordinator: BoschAlarmCoordinator = config_entry.runtime_data
+    panel = config_entry.runtime_data
 
     async_add_entities(
-        PanelLockEntity(coordinator, door_id) for door_id in coordinator.panel.doors
+        PanelLockEntity(
+            panel,
+            door_id,
+            config_entry.unique_id or config_entry.entry_id,
+        )
+        for door_id in panel.doors
     )
 
 
 PARALLEL_UPDATES = 0
 
 
-class PanelLockEntity(CoordinatorEntity[BoschAlarmCoordinator], LockEntity):
+class PanelLockEntity(LockEntity):
     """A lock entity for a door on a bosch alarm panel."""
 
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator: BoschAlarmCoordinator, door_id: int) -> None:
+    def __init__(self, panel: Panel, door_id: int, unique_id: str) -> None:
         """Set up a lock entity for a door on a bosch alarm panel."""
-        super().__init__(coordinator, door_id)
-        self._door = coordinator.panel.doors[door_id]
+        self.panel = panel
+        self._door = panel.doors[door_id]
         self._attr_name = self._door.name
-        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_door_{door_id}"
+        self._attr_unique_id = f"{unique_id}_door_{door_id}"
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
-            name=f"Bosch {coordinator.panel.model}",
+            identifiers={(DOMAIN, unique_id)},
+            name=f"Bosch {panel.model}",
             manufacturer="Bosch Security Systems",
-            model=coordinator.panel.model,
-            sw_version=coordinator.panel.firmware_version,
+            model=panel.model,
+            sw_version=panel.firmware_version,
         )
         self._door_id = door_id
 
@@ -63,11 +69,11 @@ class PanelLockEntity(CoordinatorEntity[BoschAlarmCoordinator], LockEntity):
 
     async def async_lock(self, **kwargs: Any) -> None:
         """Lock the door."""
-        await self.coordinator.panel.door_relock(self._door_id)
+        await self.panel.door_relock(self._door_id)
 
     async def async_unlock(self, **kwargs: Any) -> None:
         """Unlock the door."""
-        await self.coordinator.panel.door_unlock(self._door_id)
+        await self.panel.door_unlock(self._door_id)
 
     async def async_added_to_hass(self) -> None:
         """Observe state changes."""

@@ -1,33 +1,11 @@
 """Define fixtures for Bosch Alarm tests."""
 
 from collections.abc import Generator
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-from dataclasses import dataclass
-from datetime import datetime
-from unittest.mock import AsyncMock, patch
-
-from bosch_alarm_mode2.const import (
-    AREA_ARMING_STATUS,
-    AREA_STATUS,
-    DOOR_ACTION,
-    DOOR_STATUS,
-    OUTPUT_STATUS,
-    POINT_STATUS,
-)
-from bosch_alarm_mode2.panel import Area, Door, Output, Panel, Point
-=======
->>>>>>> Stashed changes
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from bosch_alarm_mode2.panel import Area
+from bosch_alarm_mode2.panel import Area, Door, Output, Point
 from bosch_alarm_mode2.utils import Observable
-<<<<<<< Updated upstream
-=======
->>>>>>> bosch-alarm
->>>>>>> Stashed changes
 import pytest
 
 from homeassistant.components.bosch_alarm.const import (
@@ -35,9 +13,6 @@ from homeassistant.components.bosch_alarm.const import (
     CONF_USER_CODE,
     DOMAIN,
 )
-<<<<<<< Updated upstream
-from homeassistant.const import CONF_HOST, CONF_MODEL, CONF_PASSWORD, CONF_PORT
-=======
 from homeassistant.const import (
     CONF_CODE,
     CONF_HOST,
@@ -45,7 +20,7 @@ from homeassistant.const import (
     CONF_PASSWORD,
     CONF_PORT,
 )
->>>>>>> Stashed changes
+from homeassistant.helpers.device_registry import format_mac
 
 from tests.common import MockConfigEntry
 
@@ -68,6 +43,18 @@ def extra_config_entry_data(
 ) -> dict[str, Any]:
     """Return extra config entry data."""
     return {CONF_MODEL: model_name} | config_flow_data
+
+
+@pytest.fixture(params=[None])
+def mac_address(request: pytest.FixtureRequest) -> str | None:
+    """Return entity mac address."""
+    return request.param
+
+
+@pytest.fixture(params=[None])
+def arming_code(request: pytest.FixtureRequest) -> str | None:
+    """Return arming code."""
+    return request.param
 
 
 @pytest.fixture
@@ -93,6 +80,16 @@ def model_name(model: str) -> str | None:
 
 
 @pytest.fixture
+def entity_id(model: str) -> str | None:
+    """Return extra config entry data."""
+    return {
+        "solution_3000": "bosch_solution_3000",
+        "amax_3000": "bosch_amax_3000",
+        "b5512": "bosch_b5512_us1b",
+    }.get(model)
+
+
+@pytest.fixture
 def serial_number(model: str) -> str | None:
     """Return extra config entry data."""
     if model == "solution_3000":
@@ -110,128 +107,65 @@ def mock_setup_entry() -> Generator[AsyncMock]:
         yield mock_setup_entry
 
 
-<<<<<<< Updated upstream
-=======
-@pytest.fixture(name="data_solution_3000")
-def data_solution_3000_fixture() -> dict:
-    """Define a testing config for configuring a Solution 3000 panel."""
-    return {CONF_USER_CODE: "1234"}
+@pytest.fixture
+def points() -> Generator[dict[int, Point]]:
+    """Define a mocked door."""
+    names = [
+        "Window",
+        "Door",
+        "Motion Detector",
+        "CO Detector",
+        "Smoke Detector",
+        "Glassbreak Sensor",
+        "Bedroom",
+    ]
+    points = {}
+    for i, name in enumerate(names):
+        mock = AsyncMock(spec=Point)
+        mock.name = name
+        mock.status_observer = AsyncMock(spec=Observable)
+        mock.is_open.return_value = False
+        mock.is_normal.return_value = True
+        points[i] = mock
+    return points
 
 
-@pytest.fixture(name="data_amax_3000")
-def data_amax_3000_fixture() -> dict:
-    """Define a testing config for configuring an AMAX 3000 panel."""
-    return {CONF_INSTALLER_CODE: "1234", CONF_PASSWORD: "1234567890"}
+@pytest.fixture
+def output() -> Generator[Output]:
+    """Define a mocked output."""
+    mock = AsyncMock(spec=Output)
+    mock.name = "Output A"
+    mock.status_observer = AsyncMock(spec=Observable)
+    mock.is_active.return_value = False
+    return mock
 
 
-@pytest.fixture(name="data_b5512")
-def data_b5512_fixture() -> dict:
-    """Define a testing config for configuring a B5512 panel."""
-    return {CONF_PASSWORD: "1234567890"}
+@pytest.fixture
+def door() -> Generator[Door]:
+    """Define a mocked door."""
+    mock = AsyncMock(spec=Door)
+    mock.name = "Main Door"
+    mock.status_observer = AsyncMock(spec=Observable)
+    mock.is_open.return_value = False
+    mock.is_locked.return_value = True
+    return mock
 
 
-@pytest.fixture(name="data_areas")
-def data_areas_fixture() -> list[Area]:
-    """Define a mocked area config."""
-    return {1: Area("Area1", AREA_STATUS.DISARMED)}
-
-
-@pytest.fixture(name="data_outputs")
-def data_outputs_fixture() -> list[Output]:
-    """Define a mocked output config."""
-    return {1: Output("Output A", OUTPUT_STATUS.INACTIVE)}
-
-
-@pytest.fixture(name="data_doors")
-def data_doors_fixture() -> list[Door]:
-    """Define a mocked door config."""
-    return {1: Door("Main Door", DOOR_STATUS.LOCKED)}
-
-
-@pytest.fixture(name="data_points")
-def data_points_fixture() -> list[Point]:
-    """Define a mocked points config."""
-    return {
-        1: Point("Window", POINT_STATUS.NORMAL),
-        2: Point("Door", POINT_STATUS.NORMAL),
-        3: Point("Motion Detector", POINT_STATUS.NORMAL),
-        4: Point("CO Detector", POINT_STATUS.NORMAL),
-        5: Point("Smoke Detector", POINT_STATUS.NORMAL),
-        6: Point("GlassBreak Detector", POINT_STATUS.NORMAL),
-    }
-
-
-@pytest.fixture(name="bosch_alarm_test_data")
-def bosch_alarm_test_data_fixture(
-    request: pytest.FixtureRequest,
-    data_solution_3000: dict,
-    data_amax_3000: dict,
-    data_b5512: dict,
-    data_areas: list[Area],
-    data_outputs: list[Output],
-    data_doors: list[Door],
-    data_points: list[Point],
-) -> Generator[MockBoschAlarmConfig]:
-    """Define a fixture to set up Bosch Alarm."""
-    if request.param == "Solution 3000":
-        config = MockBoschAlarmConfig(request.param, None, data_solution_3000, None)
-    if request.param == "AMAX 3000":
-        config = MockBoschAlarmConfig(request.param, None, data_amax_3000, None)
-    if request.param == "B5512 (US1B)":
-        config = MockBoschAlarmConfig(request.param, 1234567890, data_b5512, None)
-
-    def area_arm_update(self: Panel, area_id: int, arm_type: int) -> None:
-        if arm_type == self._all_arming_id:
-            self.areas[area_id].status = AREA_STATUS.ALL_ARMED[0]
-        if arm_type == self._partial_arming_id:
-            self.areas[area_id].status = AREA_STATUS.PART_ARMED[0]
-
-    async def area_arm(self: Panel, area_id: int, arm_type: int) -> None:
-        if arm_type == AREA_ARMING_STATUS.DISARM:
-            self.areas[area_id].status = AREA_STATUS.DISARMED
-        if arm_type in (self._all_arming_id, self._partial_arming_id):
-            self.areas[area_id].status = AREA_STATUS.ARMING[0]
-            asyncio.get_event_loop().call_later(
-                0.1, area_arm_update, self, area_id, arm_type
-            )
-
-    async def set_output_state(self: Panel, output_id: int, state: int) -> None:
-        self.outputs[output_id].status = state
-
-    async def set_door_state(self: Panel, door_id: int, state: int) -> None:
-        if state == DOOR_ACTION.UNLOCK:
-            self.doors[door_id].status = DOOR_STATUS.UNLOCKED
-        if state == DOOR_ACTION.TERMINATE_UNLOCK:
-            self.doors[door_id].status = DOOR_STATUS.LOCKED
-
-    async def set_panel_date(self: Panel, date: datetime) -> None:
-        pass
-
-    async def connect(self: Panel, load_selector: int = 0):
-        if config.side_effect:
-            raise config.side_effect
-        self.model = config.model
-        self.serial_number = config.serial
-        self.areas = data_areas
-        self.outputs = data_outputs
-        self.doors = data_doors
-        self.points = data_points
-
-    with (
-        patch("bosch_alarm_mode2.panel.Panel.connect", connect),
-        patch("bosch_alarm_mode2.panel.Panel._area_arm", area_arm),
-        patch("bosch_alarm_mode2.panel.Panel._set_output_state", set_output_state),
-        patch("bosch_alarm_mode2.panel.Panel._door_set_state", set_door_state),
-        patch("bosch_alarm_mode2.panel.Panel.set_panel_date", set_panel_date),
->>>>>>> Stashed changes
 @pytest.fixture
 def area() -> Generator[Area]:
     """Define a mocked area."""
     mock = AsyncMock(spec=Area)
     mock.name = "Area1"
     mock.status_observer = AsyncMock(spec=Observable)
+    mock.alarm_observer = AsyncMock(spec=Observable)
+    mock.ready_observer = AsyncMock(spec=Observable)
+    mock.alarms = []
+    mock.faults = []
+    mock.all_ready = True
+    mock.part_ready = True
     mock.is_triggered.return_value = False
     mock.is_disarmed.return_value = True
+    mock.is_armed.return_value = False
     mock.is_arming.return_value = False
     mock.is_pending.return_value = False
     mock.is_part_armed.return_value = False
@@ -241,7 +175,12 @@ def area() -> Generator[Area]:
 
 @pytest.fixture
 def mock_panel(
-    area: AsyncMock, model_name: str, serial_number: str | None
+    area: AsyncMock,
+    door: AsyncMock,
+    output: AsyncMock,
+    points: dict[int, AsyncMock],
+    model_name: str,
+    serial_number: str | None,
 ) -> Generator[AsyncMock]:
     """Define a fixture to set up Bosch Alarm."""
     with (
@@ -252,40 +191,32 @@ def mock_panel(
     ):
         client = mock_panel.return_value
         client.areas = {1: area}
+        client.doors = {1: door}
+        client.outputs = {1: output}
+        client.points = points
         client.model = model_name
+        client.faults = []
+        client.events = []
         client.firmware_version = "1.0.0"
+        client.protocol_version = "1.0.0"
         client.serial_number = serial_number
         client.connection_status_observer = AsyncMock(spec=Observable)
+        client.faults_observer = AsyncMock(spec=Observable)
+        client.history_observer = AsyncMock(spec=Observable)
         yield client
 
 
-<<<<<<< Updated upstream
-=======
-@pytest.fixture(name="bosch_config_entry")
-def bosch_config_entry_fixture(
-    bosch_alarm_test_data: MockBoschAlarmConfig, request: pytest.FixtureRequest
-) -> Generator[MockConfigEntry]:
-    """Mock config entry for bosch alarm."""
-    return MockConfigEntry(
-        domain=DOMAIN,
-        unique_id=str(bosch_alarm_test_data.serial or "unique_id"),
-        entry_id=bosch_alarm_test_data.model,
-        data={
-            CONF_HOST: "0.0.0.0",
-            CONF_PORT: 7700,
-            CONF_MODEL: bosch_alarm_test_data.model,
-            **bosch_alarm_test_data.config,
-        },
-        options={CONF_CODE: request.param},
->>>>>>> Stashed changes
 @pytest.fixture
 def mock_config_entry(
-    extra_config_entry_data: dict[str, Any], serial_number: str | None
+    extra_config_entry_data: dict[str, Any],
+    serial_number: str | None,
+    arming_code: str | None,
+    mac_address: str | None,
 ) -> MockConfigEntry:
     """Mock config entry for bosch alarm."""
     return MockConfigEntry(
         domain=DOMAIN,
-        unique_id=serial_number,
+        unique_id=(mac_address and format_mac(mac_address)) or serial_number,
         entry_id="01JQ917ACKQ33HHM7YCFXYZX51",
         data={
             CONF_HOST: "0.0.0.0",
@@ -293,4 +224,5 @@ def mock_config_entry(
             CONF_MODEL: "bosch_alarm_test_data.model",
         }
         | extra_config_entry_data,
+        options={CONF_CODE: arming_code},
     )

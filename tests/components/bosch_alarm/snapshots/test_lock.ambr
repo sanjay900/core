@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_lock[AMAX 3000-None][lock.bosch_amax_3000_main_door-entry]
+# name: test_lock[None-None-amax_3000][lock.bosch_amax_3000_main_door-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -29,11 +29,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'AMAX 3000_door_1',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_door_1',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_lock[AMAX 3000-None][lock.bosch_amax_3000_main_door-state]
+# name: test_lock[None-None-amax_3000][lock.bosch_amax_3000_main_door-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'Bosch AMAX 3000 Main Door',
@@ -47,7 +47,7 @@
     'state': 'locked',
   })
 # ---
-# name: test_lock[B5512 (US1B)-None][lock.bosch_b5512_us1b_main_door-entry]
+# name: test_lock[None-None-b5512][lock.bosch_b5512_us1b_main_door-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -77,11 +77,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'B5512 (US1B)_door_1',
+    'unique_id': '01JQ917ACKQ33HHM7YCFXYZX51_door_1',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_lock[B5512 (US1B)-None][lock.bosch_b5512_us1b_main_door-state]
+# name: test_lock[None-None-b5512][lock.bosch_b5512_us1b_main_door-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'Bosch B5512 (US1B) Main Door',
@@ -95,7 +95,7 @@
     'state': 'locked',
   })
 # ---
-# name: test_lock[Solution 3000-None][lock.bosch_solution_3000_main_door-entry]
+# name: test_lock[None-None-solution_3000][lock.bosch_solution_3000_main_door-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
     }),
@@ -125,11 +125,11 @@
     'previous_unique_id': None,
     'supported_features': 0,
     'translation_key': None,
-    'unique_id': 'Solution 3000_door_1',
+    'unique_id': '1234567890_door_1',
     'unit_of_measurement': None,
   })
 # ---
-# name: test_lock[Solution 3000-None][lock.bosch_solution_3000_main_door-state]
+# name: test_lock[None-None-solution_3000][lock.bosch_solution_3000_main_door-state]
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'Bosch Solution 3000 Main Door',

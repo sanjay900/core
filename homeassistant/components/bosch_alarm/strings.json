@@ -82,6 +82,9 @@
     },
     "authentication_failed": {
       "message": "Incorrect credentials for panel."
+    },
+    "invalid_code": {
+      "message": "The arming code is incorrect."
     }
   },
   "services": {

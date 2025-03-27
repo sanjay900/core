@@ -1,9 +1,10 @@
 """Tests for Bosch Alarm component."""
 
 from collections.abc import AsyncGenerator
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
+import voluptuous as vol
 
 from homeassistant.components.bosch_alarm.const import (
     ATTR_CONFIG_ENTRY_ID,
@@ -15,7 +16,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.util import dt as dt_util
 
-from .conftest import MockBoschAlarmConfig
+from . import setup_integration
 
 from tests.common import MockConfigEntry
 
@@ -27,30 +28,33 @@ async def platforms() -> AsyncGenerator[None]:
         yield
 
 
-@pytest.mark.parametrize(
-    ("bosch_alarm_test_data", "bosch_config_entry"),
-    [("Solution 3000", None)],
-    indirect=True,
-)
 async def test_set_date_time_service(
     hass: HomeAssistant,
-    bosch_alarm_test_data: MockBoschAlarmConfig,
-    bosch_config_entry: MockConfigEntry,
+    mock_panel: AsyncMock,
+    area: AsyncMock,
+    mock_config_entry: MockConfigEntry,
 ) -> None:
-    """Test that alarm panel state changes after arming the panel."""
-    bosch_config_entry.add_to_hass(hass)
-    assert await hass.config_entries.async_setup(bosch_config_entry.entry_id)
-    await hass.async_block_till_done()
+    """Test that the service calls succeed if the service call is valid."""
+    await setup_integration(hass, mock_config_entry)
     await hass.services.async_call(
         DOMAIN,
         SET_DATE_TIME_SERVICE_NAME,
         {
-            ATTR_CONFIG_ENTRY_ID: [bosch_config_entry.entry_id],
+            ATTR_CONFIG_ENTRY_ID: [mock_config_entry.entry_id],
             DATETIME_ATTR: dt_util.now(),
         },
         blocking=True,
     )
 
+
+async def test_set_date_time_service_fails_bad_entity(
+    hass: HomeAssistant,
+    mock_panel: AsyncMock,
+    area: AsyncMock,
+    mock_config_entry: MockConfigEntry,
+) -> None:
+    """Test that the service calls succeed if the service call is done for an incorrect entity."""
+    await setup_integration(hass, mock_config_entry)
     with pytest.raises(HomeAssistantError):
         await hass.services.async_call(
             DOMAIN,
@@ -58,6 +62,26 @@ async def test_set_date_time_service(
             {
                 ATTR_CONFIG_ENTRY_ID: ["bad-config_id"],
                 DATETIME_ATTR: dt_util.now(),
+            },
+            blocking=True,
+        )
+
+
+async def test_set_date_time_service_fails_bad_params(
+    hass: HomeAssistant,
+    mock_panel: AsyncMock,
+    area: AsyncMock,
+    mock_config_entry: MockConfigEntry,
+) -> None:
+    """Test that the service calls succeed if the service call is done with incorrect params."""
+    await setup_integration(hass, mock_config_entry)
+    with pytest.raises(vol.MultipleInvalid):
+        await hass.services.async_call(
+            DOMAIN,
+            SET_DATE_TIME_SERVICE_NAME,
+            {
+                ATTR_CONFIG_ENTRY_ID: [mock_config_entry.entry_id],
+                DATETIME_ATTR: "",
             },
             blocking=True,
         )

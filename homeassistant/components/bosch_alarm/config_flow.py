@@ -25,9 +25,6 @@ from homeassistant.const import (
     CONF_PASSWORD,
     CONF_PORT,
 )
-import homeassistant.helpers.config_validation as cv
-
-from .const import CONF_INSTALLER_CODE, CONF_USER_CODE, DOMAIN
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import AbortFlow
 import homeassistant.helpers.config_validation as cv
@@ -39,7 +36,7 @@ from homeassistant.helpers.schema_config_entry_flow import (
 from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
 
 from .const import CONF_INSTALLER_CODE, CONF_USER_CODE, DOMAIN
-from .coordinator import BoschAlarmConfigEntry
+from .types import BoschAlarmConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -139,6 +136,13 @@ class BoschAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
             else:
                 self._data = user_input
                 self._data[CONF_MODEL] = model
+
+                if self.source == SOURCE_RECONFIGURE:
+                    if (
+                        self._get_reconfigure_entry().data[CONF_MODEL]
+                        != self._data[CONF_MODEL]
+                    ):
+                        raise AbortFlow("unique_id_mismatch")
                 return await self.async_step_auth()
         return self.async_show_form(
             step_id="user",
@@ -223,7 +227,7 @@ class BoschAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
-                if serial_number:
+                if serial_number and not self.unique_id:
                     await self.async_set_unique_id(str(serial_number))
                 if self.source == SOURCE_USER:
                     if serial_number:
@@ -235,11 +239,6 @@ class BoschAlarmConfigFlow(ConfigFlow, domain=DOMAIN):
                 if self.source == SOURCE_RECONFIGURE:
                     if serial_number:
                         self._abort_if_unique_id_mismatch()
-                    if (
-                        self._get_reconfigure_entry().data[CONF_MODEL]
-                        != self._data[CONF_MODEL]
-                    ):
-                        raise AbortFlow("unique_id_mismatch")
                 if self.source in (SOURCE_USER, SOURCE_DHCP):
                     return self.async_create_entry(
                         title=f"Bosch {model}", data=self._data

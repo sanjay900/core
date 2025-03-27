@@ -4,14 +4,15 @@ from __future__ import annotations
 
 from typing import Any
 
+from bosch_alarm_mode2 import Panel
+
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
-from .coordinator import BoschAlarmConfigEntry, BoschAlarmCoordinator
+from .types import BoschAlarmConfigEntry
 
 
 async def async_setup_entry(
@@ -21,37 +22,39 @@ async def async_setup_entry(
 ) -> None:
     """Set up switch entities for outputs."""
 
-    coordinator: BoschAlarmCoordinator = config_entry.runtime_data
+    panel = config_entry.runtime_data
 
     async_add_entities(
-        PanelOutputEntity(coordinator, output_id)
-        for output_id in coordinator.panel.outputs
+        PanelOutputEntity(
+            panel, output_id, config_entry.unique_id or config_entry.entry_id
+        )
+        for output_id in panel.outputs
     )
 
 
 PARALLEL_UPDATES = 0
 
 
-class PanelOutputEntity(CoordinatorEntity[BoschAlarmCoordinator], SwitchEntity):
+class PanelOutputEntity(SwitchEntity):
     """An output entity for a bosch alarm panel."""
 
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator: BoschAlarmCoordinator, output_id: int) -> None:
+    def __init__(self, panel: Panel, output_id: int, unique_id: str) -> None:
         """Set up an output entity for a bosch alarm panel."""
-        super().__init__(coordinator, output_id)
-        self._output = coordinator.panel.outputs[output_id]
+        self.panel = panel
+        self._output = panel.outputs[output_id]
         self._output_id = output_id
         self._attr_name = self._output.name
         self._observer = self._output.status_observer
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
-            name=f"Bosch {coordinator.panel.model}",
+            identifiers={(DOMAIN, unique_id)},
+            name=f"Bosch {panel.model}",
             manufacturer="Bosch Security Systems",
-            model=coordinator.panel.model,
-            sw_version=coordinator.panel.firmware_version,
+            model=panel.model,
+            sw_version=panel.firmware_version,
         )
-        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_output_{output_id}"
+        self._attr_unique_id = f"{unique_id}_output_{output_id}"
 
     async def async_added_to_hass(self) -> None:
         """Observe state changes."""
@@ -69,8 +72,8 @@ class PanelOutputEntity(CoordinatorEntity[BoschAlarmCoordinator], SwitchEntity):
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn on this output."""
-        await self.coordinator.panel.set_output_active(self._output_id)
+        await self.panel.set_output_active(self._output_id)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn off this output."""
-        await self.coordinator.panel.set_output_inactive(self._output_id)
+        await self.panel.set_output_inactive(self._output_id)
