@@ -11,6 +11,7 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelState,
 )
 from homeassistant.const import (
+    ATTR_CODE,
     ATTR_ENTITY_ID,
     SERVICE_ALARM_ARM_AWAY,
     SERVICE_ALARM_ARM_HOME,
@@ -110,6 +111,63 @@ async def test_update_alarm_device(
 
     await call_observable(hass, area.status_observer)
     assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
+
+
+async def test_update_alarm_device_with_incorrect_code(
+    hass: HomeAssistant,
+    mock_panel: AsyncMock,
+    area: AsyncMock,
+    mock_config_entry: MockConfigEntry,
+) -> None:
+    """Test that alarm panel state does not change if a panel is armed with the wrong code."""
+
+    await setup_integration(hass, mock_config_entry)
+    entity_id = "alarm_control_panel.bosch_solution_3000_area1"
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
+    await hass.services.async_call(
+        ALARM_CONTROL_PANEL_DOMAIN,
+        "alarm_arm_away",
+        {ATTR_ENTITY_ID: entity_id, ATTR_CODE: "12345"},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
+
+
+@pytest.mark.parametrize(
+    ("bosch_alarm_test_data", "bosch_config_entry"),
+    [("Solution 3000", "12345"), ("Solution 3000", "abcdef")],
+    indirect=True,
+)
+async def test_update_alarm_device_with_code(
+    hass: HomeAssistant,
+    mock_panel: AsyncMock,
+    area: AsyncMock,
+    mock_config_entry: MockConfigEntry,
+) -> None:
+    """Test that alarm panel state changes after arming the panel with a code."""
+    await setup_integration(hass, mock_config_entry)
+    entity_id = "alarm_control_panel.bosch_solution_3000_area1"
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.DISARMED
+    await hass.services.async_call(
+        ALARM_CONTROL_PANEL_DOMAIN,
+        "alarm_arm_away",
+        {ATTR_ENTITY_ID: entity_id, ATTR_CODE: bosch_config_entry.options[ATTR_CODE]},
+        blocking=True,
+    )
+
+    area.is_disarmed.return_value = False
+    area.is_arming.return_value = True
+
+    await call_observable(hass, area.status_observer)
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.ARMING
+
+    area.is_arming.return_value = False
+    area.is_part_armed.return_value = True
+
+    await call_observable(hass, area.status_observer)
+
+    assert hass.states.get(entity_id).state == AlarmControlPanelState.ARMED_AWAY
 
 
 async def test_alarm_control_panel(

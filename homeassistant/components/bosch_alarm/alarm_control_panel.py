@@ -3,18 +3,28 @@
 from __future__ import annotations
 
 from bosch_alarm_mode2 import Panel
+import voluptuous as vol
 
 from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
     AlarmControlPanelEntityFeature,
     AlarmControlPanelState,
+    CodeFormat,
 )
+from homeassistant.const import CONF_CODE
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import BoschAlarmConfigEntry
 from .const import DOMAIN
+
+DATETIME_ATTR = "datetime"
+SET_DATE_TIME_SERVICE_NAME = "set_date_time"
+SET_DATE_TIME_SCHEMA = cv.make_entity_service_schema(
+    {vol.Optional(DATETIME_ATTR): cv.datetime}
+)
 
 
 async def async_setup_entry(
@@ -30,9 +40,13 @@ async def async_setup_entry(
             panel,
             area_id,
             config_entry.unique_id or config_entry.entry_id,
+            config_entry.options.get(CONF_CODE, None),
         )
         for area_id in panel.areas
     )
+
+
+PARALLEL_UPDATES = 0
 
 
 class AreaAlarmControlPanel(AlarmControlPanelEntity):
@@ -46,7 +60,9 @@ class AreaAlarmControlPanel(AlarmControlPanelEntity):
     _attr_code_arm_required = False
     _attr_name = None
 
-    def __init__(self, panel: Panel, area_id: int, unique_id: str) -> None:
+    def __init__(
+        self, panel: Panel, area_id: int, unique_id: str, arming_code: str
+    ) -> None:
         """Initialise a Bosch Alarm control panel entity."""
         self.panel = panel
         self._area = panel.areas[area_id]
@@ -61,6 +77,17 @@ class AreaAlarmControlPanel(AlarmControlPanelEntity):
                 unique_id,
             ),
         )
+        self._arming_code: str | None = arming_code
+        self._attr_code_arm_required = self._arming_code is not None
+
+    @property
+    def code_format(self) -> CodeFormat | None:
+        """Return the code format for the current arming code."""
+        if self._arming_code is None:
+            return None
+        if self._arming_code.isnumeric():
+            return CodeFormat.NUMBER
+        return CodeFormat.TEXT
 
     @property
     def alarm_state(self) -> AlarmControlPanelState | None:
@@ -79,17 +106,24 @@ class AreaAlarmControlPanel(AlarmControlPanelEntity):
             return AlarmControlPanelState.ARMED_AWAY
         return None
 
+    def _arming_code_correct(self, code: str | None) -> bool:
+        """Validate a given code is correct for this panel."""
+        return bool(code == self._arming_code)
+
     async def async_alarm_disarm(self, code: str | None = None) -> None:
         """Disarm this panel."""
-        await self.panel.area_disarm(self._area_id)
+        if self._arming_code_correct(code):
+            await self.panel.area_disarm(self._area_id)
 
     async def async_alarm_arm_home(self, code: str | None = None) -> None:
         """Send arm home command."""
-        await self.panel.area_arm_part(self._area_id)
+        if self._arming_code_correct(code):
+            await self.panel.area_arm_part(self._area_id)
 
     async def async_alarm_arm_away(self, code: str | None = None) -> None:
         """Send arm away command."""
-        await self.panel.area_arm_all(self._area_id)
+        if self._arming_code_correct(code):
+            await self.panel.area_arm_all(self._area_id)
 
     @property
     def available(self) -> bool:

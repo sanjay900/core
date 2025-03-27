@@ -19,9 +19,27 @@ def disable_platform_only():
         yield
 
 
+<<<<<<< Updated upstream
 @pytest.mark.parametrize("model", ["solution_3000"])
 @pytest.mark.parametrize("exception", [PermissionError(), TimeoutError()])
 async def test_incorrect_auth(
+=======
+<<<<<<< HEAD
+@pytest.mark.parametrize(
+    ("bosch_alarm_test_data", "bosch_config_entry", "exception"),
+    [
+        ("Solution 3000", None, PermissionError()),
+        ("Solution 3000", None, TimeoutError()),
+    ],
+    indirect=["bosch_alarm_test_data", "bosch_config_entry"],
+)
+async def test_init_exceptions(
+=======
+@pytest.mark.parametrize("model", ["solution_3000"])
+@pytest.mark.parametrize("exception", [PermissionError(), TimeoutError()])
+async def test_incorrect_auth(
+>>>>>>> bosch-alarm
+>>>>>>> Stashed changes
     hass: HomeAssistant,
     mock_panel: AsyncMock,
     mock_config_entry: MockConfigEntry,
