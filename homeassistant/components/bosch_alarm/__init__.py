@@ -60,3 +60,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: BoschAlarmConfigEntry) 
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         await entry.runtime_data.disconnect()
     return unload_ok
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant,
+    config_entry: BoschAlarmConfigEntry,
+    device_entry: dr.DeviceEntry,
+) -> bool:
+    """Remove a device from a config entry."""
+    return True
